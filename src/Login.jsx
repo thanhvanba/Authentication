@@ -1,35 +1,34 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 
 const Login = () => {
-    const [username, usernameupdate] = useState('');
-    const [password, passwordupdate] = useState('');
+    const [email, useEmail] = useState('');
+    const [password, usePassword] = useState('');
 
-    const usenavigate=useNavigate();
+    const usenavigate = useNavigate();
 
-    useEffect(()=>{
-sessionStorage.clear();
-    },[]);
+    useEffect(() => {
+        sessionStorage.clear();
+    }, []);
 
-    const ProceedLogin = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
             ///implentation
-            // console.log('proceed');
-            fetch("http://localhost:3000/users/" + username).then((res) => {
+            console.log('proceed');
+            fetch("http://localhost:3000/users/" + email).then((res) => {
                 return res.json();
             }).then((resp) => {
-                //console.log(resp)
+                console.log(resp)
                 if (Object.keys(resp).length === 0) {
-                    alert('Please Enter valid username');
+                    alert('Please Enter valid email');
                 } else {
                     if (resp.password === password) {
                         alert('Success');
-                        sessionStorage.setItem('username',username);
-                        sessionStorage.setItem('userrole',resp.role);
+                        sessionStorage.setItem('email', email);
+                        sessionStorage.setItem('userrole', resp.role);
                         usenavigate('/')
-                    }else{
+                    } else {
                         alert('Please Enter valid credentials');
                     }
                 }
@@ -39,44 +38,46 @@ sessionStorage.clear();
         }
     }
 
-   
+
 
     const validate = () => {
         let result = true;
-        if (username === '' || username === null) {
+        if (email === '' || email === null) {
             result = false;
-            toast.warning('Please Enter Username');
+                ('Please Enter email');
         }
         if (password === '' || password === null) {
             result = false;
-            toast.warning('Please Enter Password');
+            alert('Please Enter Password');
         }
         return result;
     }
     return (
-        <div className="row">
-            <div className="offset-lg-3 col-lg-6" style={{ marginTop: '100px' }}>
-                <form onSubmit={ProceedLogin} className="container">
-                    <div className="card">
-                        <div className="card-header">
-                            <h2>User Login</h2>
-                        </div>
-                        <div className="card-body">
-                            <div className="form-group">
-                                <label>User Name <span className="errmsg">*</span></label>
-                                <input value={username} onChange={e => usernameupdate(e.target.value)} className="form-control"></input>
-                            </div>
-                            <div className="form-group">
-                                <label>Password <span className="errmsg">*</span></label>
-                                <input type="password" value={password} onChange={e => passwordupdate(e.target.value)} className="form-control"></input>
-                            </div>
-                        </div>
-                        <div className="card-footer">
-                            <button type="submit" className="btn btn-primary">Login</button> |
-                            <Link className="btn btn-success" to={'/register'}>New User</Link>
-                        </div>
+        <div>
+            <div className="bg-slate-400 border p-8 relative">
+                <h1 className="text-4xl text-center mb-6"> Sign Up</h1>
+                <form onSubmit={handleSubmit} action="">
+                    <div className="relative my-4">
+                        <label htmlFor="email" className="block mb-2">Email</label>
+                        <input value={email} onChange={e => useEmail(e.target.value)} autoComplete="on" type="email" name="email" id="email" className="border text-gray-900 rounded-lg block w-full p-2.5" placeholder="example@gmail.com" required="" />
                     </div>
+                    <div className="relative my-4">
+                        <label htmlFor="password" className="block mb-2">Password</label>
+                        <input value={password} onChange={e => usePassword(e.target.value)} autoComplete="on" type="password" name="password" id="password" className="border text-gray-900 rounded-lg block w-full p-2.5" placeholder="••••••••" required="" />
+                    </div>
+                    <button className="w-1/2 mb-4 text-[18px] mt-6 rounded-full bg-blue-600 text-white  hover:bg-blue-800 py-2" type='submit'>
+                        Sign In
+                    </button>
                 </form>
+                <div className="border-0 border-b-2 border-gray-300"></div>
+                <div className="mt-1">
+                    <span className="block">New User</span>
+                    <button className="w-1/2 mb-4 text-[18px] rounded-full bg-blue-600 text-white  hover:bg-blue-800 py-2" type='submit'>
+                        <Link className="text-blue-500" to='/signup'> Sign Up</Link>
+                    </button>
+
+                </div>
+
             </div>
         </div>
     );
