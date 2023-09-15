@@ -1,25 +1,40 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Axios from 'axios'
 
 const Login = () => {
     const [email, useEmail] = useState('');
     const [password, usePassword] = useState('');
 
-    const usenavigate = useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
         sessionStorage.clear();
     }, []);
 
-    const handleSubmit = (e) => {
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     try {
+    //         const response = await Axios.post('https://auth-server-fmp.vercel.app/auth/login', formData, { withCredentials: true });
+    //         alert('Đảng nhập thành công'); //console.log("Đăng nhập thành công', response.data);
+    //         AuthService.login();
+    //         if (response.data.success) { navigate('/home', { state: { data: response.data.data } }); }
+    //     } catch (error) {
+    //         alert("Đăng nhập thất bại");
+    //         //console.error("Đăng nhập thất bại', error),
+    //     }
+    // }
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (validate()) {
             ///implentation
             console.log('proceed');
-            fetch("http://localhost:3000/users/" + email).then((res) => {
+            fetch("http://localhost:3000/users/").then((res) => {
                 return res.json();
             }).then((resp) => {
                 console.log(resp)
+                console.log(Object.keys(resp).password)
+                console.log(resp.password)
                 if (Object.keys(resp).length === 0) {
                     alert('Please Enter valid email');
                 } else {
@@ -29,6 +44,7 @@ const Login = () => {
                         sessionStorage.setItem('userrole', resp.role);
                         usenavigate('/')
                     } else {
+                        console.log(resp.password)
                         alert('Please Enter valid credentials');
                     }
                 }
@@ -38,20 +54,6 @@ const Login = () => {
         }
     }
 
-
-
-    const validate = () => {
-        let result = true;
-        if (email === '' || email === null) {
-            result = false;
-                ('Please Enter email');
-        }
-        if (password === '' || password === null) {
-            result = false;
-            alert('Please Enter Password');
-        }
-        return result;
-    }
     return (
         <div>
             <div className="bg-slate-400 border p-8 relative">
