@@ -6,8 +6,10 @@ import Home from './Home'
 import { ToastContainer } from 'react-toastify'
 
 function App() {
+  // effect
+
   return (
-    <div className='text-white h-[100vh] flex justify-center items-center bg-cover' style={{ "background": "linear-gradient(to left, green, white)" }}>
+    <div className='text-black h-[100vh] flex justify-center items-center bg-cover' style={{ "backgroundColor": "white" }}>
       <ToastContainer theme='colored' position='top-center'></ToastContainer>
       <BrowserRouter>
         <Routes>
