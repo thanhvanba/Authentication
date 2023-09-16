@@ -1,57 +1,31 @@
+/* eslint-disable no-undef */
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-empty */
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import ApiService from "./ApiService";
 import Axios from 'axios'
 
 const Login = () => {
+    const { loginApi } = ApiService()
     const [email, useEmail] = useState('');
     const [password, usePassword] = useState('');
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        sessionStorage.clear();
-    }, []);
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     try {
-    //         const response = await Axios.post('https://auth-server-fmp.vercel.app/auth/login', formData, { withCredentials: true });
-    //         alert('Đảng nhập thành công'); //console.log("Đăng nhập thành công', response.data);
-    //         AuthService.login();
-    //         if (response.data.success) { navigate('/home', { state: { data: response.data.data } }); }
-    //     } catch (error) {
-    //         alert("Đăng nhập thất bại");
-    //         //console.error("Đăng nhập thất bại', error),
-    //     }
-    // }
+    // use refreshToken when press F5
+    // useEffect(() => {
+    //     sessionStorage.clear();
+    // }, []);
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (validate()) {
-            ///implentation
-            console.log('proceed');
-            fetch("http://localhost:3000/users/").then((res) => {
-                return res.json();
-            }).then((resp) => {
-                console.log(resp)
-                console.log(Object.keys(resp).password)
-                console.log(resp.password)
-                if (Object.keys(resp).length === 0) {
-                    alert('Please Enter valid email');
-                } else {
-                    if (resp.password === password) {
-                        alert('Success');
-                        sessionStorage.setItem('email', email);
-                        sessionStorage.setItem('userrole', resp.role);
-                        usenavigate('/')
-                    } else {
-                        console.log(resp.password)
-                        alert('Please Enter valid credentials');
-                    }
-                }
-            }).catch((err) => {
-                alert('Login Failed due to :' + err.message);
-            });
-        }
+        // thieu validate field
+        // if (validate()) {
+            let regobj = { email , password };
+            loginApi(regobj, navigate)
     }
 
     return (
