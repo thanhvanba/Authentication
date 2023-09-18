@@ -19,27 +19,27 @@ const Login = () => {
     // useEffect(() => {
     //     sessionStorage.clear();
     // }, []);
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         // thieu validate field
         // if (validate()) {
-            let regobj = { email , password };
-            loginApi(regobj, navigate)
+        let regobj = { email, password };
+        loginApi(regobj, navigate)
     }
 
     return (
         <div>
-            <div className="bg-slate-400 border p-8 relative">
-                <h1 className="text-4xl text-center mb-6"> Sign Up</h1>
+            <div className="w-80 bg-slate-300 rounded-lg  border p-8 relative">
+                <h1 className="text-4xl text-center mb-6"> Sign In</h1>
                 <form onSubmit={handleSubmit} action="">
                     <div className="relative my-4">
                         <label htmlFor="email" className="block mb-2">Email</label>
-                        <input value={email} onChange={e => useEmail(e.target.value)} autoComplete="on" type="email" name="email" id="email" className="border text-gray-900 rounded-lg block w-full p-2.5" placeholder="example@gmail.com" required="" />
+                        <input value={email} onChange={e => useEmail(e.target.value)} autoComplete="on" type="email" name="email" id="email" className="border outline-none text-gray-900 rounded-lg block w-full p-2.5" placeholder="example@gmail.com" required="" />
                     </div>
                     <div className="relative my-4">
                         <label htmlFor="password" className="block mb-2">Password</label>
-                        <input value={password} onChange={e => usePassword(e.target.value)} autoComplete="on" type="password" name="password" id="password" className="border text-gray-900 rounded-lg block w-full p-2.5" placeholder="••••••••" required="" />
+                        <input value={password} onChange={e => usePassword(e.target.value)} autoComplete="on" type="password" name="password" id="password" className="border outline-none text-gray-900 rounded-lg block w-full p-2.5" placeholder="••••••••" required="" />
                     </div>
                     <button className="w-1/2 mb-4 text-[18px] mt-6 rounded-full bg-blue-600 text-white  hover:bg-blue-800 py-2" type='submit'>
                         Sign In
