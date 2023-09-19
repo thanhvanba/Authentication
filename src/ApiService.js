@@ -1,10 +1,11 @@
 const ApiService = () => {
-    const loginApi = async (params, navigate) => {
+    const loginApi = async (params, navigate, setLoading) => {
         await fetch("https://auth-server-fmp.vercel.app/auth/login", {
             method: "POST",
-            headers: {
+            headers: { 
                 "Content-Type": "application/json",
             },
+            credentials: 'include',
             body: JSON.stringify(params)
         }).then((res) => {
             return res.json();
@@ -22,10 +23,12 @@ const ApiService = () => {
             }
         }).catch((err) => {
             alert('Login Failed due to :' + err.message);
+        }).finally(res =>{
+            setLoading(false)
         });
     }
 
-    const registerApi = async (params, navigate) => {
+    const registerApi = async (params, navigate, setLoading) => {
         await fetch("https://auth-server-fmp.vercel.app/auth/register", {
             method: "POST",
             headers: {
@@ -40,10 +43,12 @@ const ApiService = () => {
                 navigate('/login');
             }).catch((err) => {
                 alert('Failed :' + err?.message);
+            }).finally(res =>{
+                setLoading(false)
             });
     }
 
-    const logoutApi = async (params, navigate) => {
+    const logoutApi = async (params, navigate, setLoading) => {
         let bearerToken = `Bearer ${params}`
         await fetch("https://auth-server-fmp.vercel.app/auth/logout", {
             method: "POST",
@@ -55,39 +60,41 @@ const ApiService = () => {
             .then(res => res.json())
             .then((res) => {
                 if (res?.success) {
-                    alert(res?.message)
                     sessionStorage.removeItem('token');
                     sessionStorage.removeItem('email')
                     navigate('/login')
                 }
+            }).finally(res =>{
+                setLoading(false)
             })
     }
-    const refreshTokenApi = async (params, navigate) => {
-        let bearerToken = `Bearer ${params}`
-        console.log('clientToken', params)
+    const refreshTokenApi = async (navigate,setLoading) => {   
         return await fetch("https://auth-server-fmp.vercel.app/auth/refresh-token", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Cookie": "refreshToken=H8Awc73EBnafI8QvzRqE_",
-                "Authorization": bearerToken,
             },
+            credentials: 'include',
         })
             .then(res => res.json())
             .then((res) => {
-                if (res.success) {
-                    console.log(res?.data?.token)
+                if (res.success) {            
+                    sessionStorage.removeItem('token');    
                     sessionStorage.setItem('token', res?.data?.token);
+                    let clientToken = sessionStorage.getItem('token')
+                    console.log('clientToken', clientToken)
+                    console.log(setLoading)
+                    callApiTest(clientToken, navigate,setLoading)
                 }
                 else {
                     console.log(res?.data?.token)
-                    alert('Failed :' + err?.message);
+                    alert('Failed :' + res?.message);
                     navigate('/login')
                 }
             })
     }
 
-    const callApiTest = async (params, navigate) => {
+    const callApiTest = async (params, navigate, setLoading) => {
         let bearerToken = `Bearer ${params}`
         await fetch("https://auth-server-fmp.vercel.app/test", {
             method: "POST",
@@ -98,18 +105,22 @@ const ApiService = () => {
         })
             .then(res => res.json())
             .then((res) => {
-                if (res?.success)
-                    alert(res?.message)
-                else {
-                    refreshTokenApi(params, navigate)
+                if (res?.success){
+                    const divThongBao = document.getElementById("testTB")
+                    console.log(divThongBao.textContent)
+                    divThongBao.textContent = res?.message
                 }
-            });
+                else {
+                    refreshTokenApi(navigate,setLoading)
+                }
+            }).finally(res =>{
+                setLoading(false)
+            })
     }
 
     return {
         loginApi,
         registerApi,
-        refreshTokenApi,
         callApiTest,
         logoutApi
     }

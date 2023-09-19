@@ -2,16 +2,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-empty */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ApiService from "./ApiService";
-import Axios from 'axios'
 
 const Login = () => {
     const { loginApi } = ApiService()
     const [email, useEmail] = useState('');
     const [password, usePassword] = useState('');
-
+    const [loading, setLoading] = useState(false)
     const navigate = useNavigate();
 
 
@@ -24,8 +23,9 @@ const Login = () => {
         e.preventDefault();
         // thieu validate field
         // if (validate()) {
+        setLoading(true)
         let regobj = { email, password };
-        loginApi(regobj, navigate)
+        loginApi(regobj, navigate, setLoading)
     }
 
     return (
@@ -41,7 +41,7 @@ const Login = () => {
                         <label htmlFor="password" className="block mb-2">Password</label>
                         <input value={password} onChange={e => usePassword(e.target.value)} autoComplete="on" type="password" name="password" id="password" className="border outline-none text-gray-900 rounded-lg block w-full p-2.5" placeholder="••••••••" required="" />
                     </div>
-                    <button className="w-1/2 mb-4 text-[18px] mt-6 rounded-full bg-blue-600 text-white  hover:bg-blue-800 py-2" type='submit'>
+                    <button disabled={loading} className="w-1/2 mb-4 text-[18px] mt-6 rounded-full bg-blue-600 text-white  hover:bg-blue-800 py-2" type='submit'>
                         Sign In
                     </button>
                 </form>

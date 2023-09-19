@@ -11,15 +11,16 @@ const Signup = () => {
     const [fullName, useFullName] = useState('')
     const [password, usePassword] = useState('')
     const [cfpassword, useCfPassword] = useState('')
-
+    const [loading, setLoading] = useState(false)
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         let regobj = { email, fullName, password };
         if (IsValidate()) {
+            setLoading(true)
             console.log(regobj);
-            registerApi(regobj, navigate)
+            registerApi(regobj, navigate, setLoading)
         }
     }
 
@@ -79,7 +80,7 @@ const Signup = () => {
                         <label htmlFor="cfpassword" className="block mb-2">Confirm Password</label>
                         <input type="password" value={cfpassword} onChange={e => useCfPassword(e.target.value)} name="cfpassword" id="cfpassword" autoComplete="on" placeholder="••••••••" className="border outline-none text-gray-900 rounded-lg block w-full p-2.5" required="" />
                     </div>
-                    <button className="w-full mb-4 text-[18px] mt-6 rounded-full bg-blue-600 text-white  hover:bg-blue-800 py-2" type='submit'>
+                    <button disabled={loading} className="w-full mb-4 text-[18px] mt-6 rounded-full bg-blue-600 text-white  hover:bg-blue-800 py-2" type='submit'>
                         SignUp
                     </button>
                 </form>
