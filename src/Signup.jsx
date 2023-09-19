@@ -41,10 +41,6 @@ const Signup = () => {
             errormessage += ' Email';
         }
 
-        // if (cfpassword !== password) {
-        //     errormessage
-        // }
-        // handle validate password
 
         if(!isproceed){
             alert(errormessage)

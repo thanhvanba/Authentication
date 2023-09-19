@@ -14,15 +14,8 @@ const Login = () => {
     const navigate = useNavigate();
 
 
-    // use refreshToken when press F5
-    // useEffect(() => {
-    //     sessionStorage.clear();
-    // }, []);
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // thieu validate field
-        // if (validate()) {
         setLoading(true)
         let regobj = { email, password };
         loginApi(regobj, navigate, setLoading)
